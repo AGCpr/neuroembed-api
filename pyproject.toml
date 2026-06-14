@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Hosted REVE EEG foundation-model inference API"
 readme = "README.md"
 requires-python = ">=3.11,<3.13"
-license = { text = "MIT" }
+license = "MIT"
 authors = [{ name = "NeuroSaaS Loop" }]
 keywords = ["eeg", "neuroscience", "foundation-model", "brain-computer-interface", "bci"]
 classifiers = [
