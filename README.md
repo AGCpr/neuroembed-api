@@ -4,7 +4,8 @@
 > Upload EEG, get 256-dim brain-state embeddings + cognitive scores.
 > **Research use only — not a medical device.**
 
-[![Tests](https://img.shields.io/badge/tests-35%20passed-brightgreen)]()
+[![CI](https://github.com/AGCpr/neuroembed-api/actions/workflows/ci.yml/badge.svg)](https://github.com/AGCpr/neuroembed-api/actions/workflows/ci.yml)
+[![Tests](https://img.shields.io/badge/tests-37%20passed-brightgreen)]()
 [![Coverage](https://img.shields.io/badge/coverage-93%25-brightgreen)]()
 [![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue)]()
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)]()
