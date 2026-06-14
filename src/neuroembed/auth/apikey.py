@@ -22,7 +22,8 @@ def generate_api_key() -> str:
 
 def hash_api_key(key: str) -> str:
     """Hash a plaintext key with bcrypt. Returns a string suitable for storage."""
-    return bcrypt.hashpw(key.encode("utf-8"), bcrypt.gensalt(rounds=12)).decode("utf-8")
+    raw: bytes = bcrypt.hashpw(key.encode("utf-8"), bcrypt.gensalt(rounds=12))
+    return raw.decode("utf-8")
 
 
 def verify_api_key(key: str, hashed: str) -> bool:
@@ -30,7 +31,8 @@ def verify_api_key(key: str, hashed: str) -> bool:
     if not key or not hashed:
         return False
     try:
-        return bcrypt.checkpw(key.encode("utf-8"), hashed.encode("utf-8"))
+        result: bool = bcrypt.checkpw(key.encode("utf-8"), hashed.encode("utf-8"))
+        return result
     except (ValueError, TypeError):
         return False
 
