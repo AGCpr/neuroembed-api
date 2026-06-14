@@ -8,6 +8,7 @@ lean (no torch import at startup) and CPU-only-runnable for development.
 from __future__ import annotations
 
 from fastapi import FastAPI, Response
+from fastapi.staticfiles import StaticFiles
 
 from neuroembed.api.v1 import cognitive as v1_cognitive
 from neuroembed.api.v1 import embeddings as v1_embeddings
@@ -70,6 +71,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     # Mount the v1 API. Models/health are added as M0 grows.
     app.include_router(v1_embeddings.router)
     app.include_router(v1_cognitive.router)
+
+    # Mount the static dashboard at /dashboard
+    import os as _os
+    _static_dir = _os.path.join(_os.path.dirname(__file__), "static")
+    if _os.path.isdir(_static_dir):
+        app.mount("/dashboard", StaticFiles(directory=_static_dir, html=True), name="dashboard")
 
     log.info("neuroembed_app_created", model_id=settings.model_id)
     return app

@@ -20,3 +20,4 @@ build/
 *.log
 .DS_Store
 node_modules/
+reqs_no_torch.txt

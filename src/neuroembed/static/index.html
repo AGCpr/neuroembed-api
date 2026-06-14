@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NeuroEmbed — Developer Console</title>
+<style>
+:root {
+  --bg: #0b0e14;
+  --surface: #11151c;
+  --border: #1f2731;
+  --ink: #e6e9ef;
+  --muted: #8693a3;
+  --accent: #22d3ee;
+  --accent-2: #a78bfa;
+  --warn: #fbbf24;
+  --danger: #fb7185;
+  --ok: #34d399;
+  --font-mono: ui-monospace, "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--font-sans); font-size: 14px; line-height: 1.5;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.layout {
+  display: grid; grid-template-columns: 240px 1fr; min-height: 100vh;
+}
+.sidebar {
+  background: var(--surface); border-right: 1px solid var(--border);
+  padding: 24px 16px;
+}
+.sidebar h1 {
+  font-size: 18px; margin: 0 0 4px; letter-spacing: -0.01em;
+}
+.sidebar .tag {
+  color: var(--muted); font-size: 12px; font-family: var(--font-mono);
+}
+.nav { margin-top: 32px; }
+.nav a {
+  display: block; padding: 8px 12px; color: var(--ink); border-radius: 6px;
+  font-size: 13px; margin-bottom: 2px;
+}
+.nav a:hover { background: rgba(255,255,255,0.04); text-decoration: none; }
+.nav a.active { background: rgba(34,211,238,0.1); color: var(--accent); }
+.main { padding: 32px 40px; max-width: 1100px; }
+.main h2 { font-size: 22px; margin: 0 0 4px; }
+.sub { color: var(--muted); margin-bottom: 32px; }
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 20px; margin-bottom: 20px;
+}
+.card h3 { margin: 0 0 12px; font-size: 14px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+.row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.mono { font-family: var(--font-mono); font-size: 12.5px; }
+.kbd {
+  background: #0a0d12; border: 1px solid var(--border); border-bottom-width: 2px;
+  padding: 2px 6px; border-radius: 4px; font-family: var(--font-mono); font-size: 12px;
+}
+.badge {
+  display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 11px;
+  font-family: var(--font-mono); font-weight: 600;
+}
+.badge-ok { background: rgba(52,211,153,0.12); color: var(--ok); }
+.badge-warn { background: rgba(251,191,36,0.12); color: var(--warn); }
+.badge-err { background: rgba(251,113,133,0.12); color: var(--danger); }
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.metric .v { font-size: 28px; font-weight: 600; letter-spacing: -0.02em; }
+.metric .l { color: var(--muted); font-size: 12px; }
+pre {
+  background: #0a0d12; border: 1px solid var(--border); border-radius: 8px;
+  padding: 14px; overflow-x: auto; font-size: 12.5px; color: var(--ink);
+}
+code { font-family: var(--font-mono); }
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+.field label { color: var(--muted); font-size: 12px; }
+input, textarea, select {
+  background: #0a0d12; border: 1px solid var(--border); color: var(--ink);
+  border-radius: 6px; padding: 8px 10px; font-family: var(--font-mono); font-size: 13px;
+}
+input:focus, textarea:focus { outline: 1px solid var(--accent); }
+button {
+  background: var(--accent); color: #061a1f; border: 0; border-radius: 6px;
+  padding: 8px 16px; font-weight: 600; cursor: pointer; font-size: 13px;
+}
+button.secondary { background: transparent; color: var(--ink); border: 1px solid var(--border); }
+button:hover { opacity: 0.9; }
+.foot { color: var(--muted); font-size: 12px; margin-top: 40px; }
+.embed-viz { display: flex; flex-direction: column; gap: 4px; }
+.embed-viz .row2 { display: flex; gap: 1px; align-items: end; height: 80px; }
+.embed-viz .bar { width: 4px; background: var(--accent); }
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <h1>NeuroEmbed</h1>
+    <div class="tag">developer console</div>
+    <nav class="nav">
+      <a class="active" href="#overview">Overview</a>
+      <a href="#keys">API keys</a>
+      <a href="#usage">Usage</a>
+      <a href="#playground">Playground</a>
+      <a href="#docs">API docs</a>
+    </nav>
+  </aside>
+  <main class="main">
+
+    <section id="overview">
+      <h2>Overview</h2>
+      <div class="sub" id="status-line">Loading…</div>
+
+      <div class="grid">
+        <div class="card metric">
+          <div class="l">Requests today</div>
+          <div class="v" id="m-requests">—</div>
+        </div>
+        <div class="card metric">
+          <div class="l">Embeddings</div>
+          <div class="v" id="m-emb">—</div>
+        </div>
+        <div class="card metric">
+          <div class="l">Avg latency</div>
+          <div class="v" id="m-latency">—</div>
+        </div>
+        <div class="card metric">
+          <div class="l">Model</div>
+          <div class="v" style="font-size:14px" id="m-model">—</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="keys">
+      <h2 style="margin-top:40px">API keys</h2>
+      <div class="sub">Provision a new key. The plaintext is shown only once.</div>
+      <div class="card">
+        <div class="row">
+          <button onclick="createKey()">Create new key</button>
+          <span class="mono" id="new-key-out" style="color:var(--accent)"></span>
+        </div>
+        <div style="margin-top:20px">
+          <h3>Existing keys</h3>
+          <table style="width:100%; border-collapse: collapse; font-size:13px" id="keys-table">
+            <thead><tr style="text-align:left; color:var(--muted); font-weight:500">
+              <th style="padding:8px 0">Key ID</th>
+              <th>Tier</th>
+              <th>Created</th>
+              <th>Last used</th>
+            </tr></thead>
+            <tbody><tr><td colspan="4" style="padding:8px 0; color:var(--muted)">No keys yet</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="usage">
+      <h2 style="margin-top:40px">Usage</h2>
+      <div class="sub">Calls per day over the last 14 days.</div>
+      <div class="card">
+        <pre id="usage-chart">No data yet</pre>
+      </div>
+    </section>
+
+    <section id="playground">
+      <h2 style="margin-top:40px">Playground</h2>
+      <div class="sub">Send a quick embeddings request. Samples are random — useful for verifying auth + caching.</div>
+      <div class="card">
+        <div class="field">
+          <label>API key</label>
+          <input id="pg-key" type="password" placeholder="nmb_***">
+        </div>
+        <div class="field">
+          <label>Electrodes (comma-separated)</label>
+          <input id="pg-elec" value="Fp1,Fp2,C3,C4,O1,O2,F3,F4">
+        </div>
+        <div class="field">
+          <label>Duration (seconds)</label>
+          <input id="pg-dur" type="number" value="8" min="4" max="120">
+        </div>
+        <div class="row">
+          <button onclick="runPlayground()">Send request</button>
+          <button class="secondary" onclick="document.getElementById('pg-out').textContent='(no output yet)'">Clear</button>
+        </div>
+        <pre id="pg-out" style="margin-top:16px; max-height:300px">(no output yet)</pre>
+      </div>
+    </section>
+
+    <section id="docs">
+      <h2 style="margin-top:40px">API documentation</h2>
+      <div class="sub">Full OpenAPI spec is at <a href="/docs">/docs</a> (Swagger UI) and <a href="/openapi.json">/openapi.json</a>.</div>
+      <div class="card">
+        <h3>POST /v1/embeddings</h3>
+        <pre>POST /v1/embeddings HTTP/1.1
+Authorization: Bearer ***: application/json
+
+{
+  "electrode_names": ["Fp1", "Fp2", "C3", "C4", "O1", "O2", "F3", "F4"],
+  "samples": [[...], [...], ...],   // shape (channels, samples)
+  "sample_rate_hz": 200,
+  "window_seconds": 4,
+  "return_per_window": false
+}</pre>
+      </div>
+    </section>
+
+    <div class="foot">NeuroEmbed API v0.1.0 · research use only · not a medical device</div>
+  </main>
+</div>
+
+<script>
+async function jsonGet(url) {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(`${r.status} ${await r.text()}`);
+  return r.json();
+}
+
+async function refreshStatus() {
+  try {
+    const h = await jsonGet('/healthz');
+    const r = await jsonGet('/readyz');
+    const s = document.getElementById('status-line');
+    s.innerHTML = `<span class="badge ${r.model_loaded ? 'badge-ok' : 'badge-warn'}">${r.model_loaded ? 'ready' : 'warming up'}</span>  healthz=${h.status}  model=${r.model_id}`;
+    document.getElementById('m-model').textContent = r.model_id.replace('brain-bzh/', '');
+  } catch (e) {
+    document.getElementById('status-line').innerHTML = `<span class="badge badge-err">error</span> ${e.message}`;
+  }
+}
+
+async function createKey() {
+  const out = document.getElementById('new-key-out');
+  out.textContent = 'generating…';
+  try {
+    const r = await fetch('/v1/auth/keys', { method: 'POST' });
+    if (!r.ok) throw new Error(`${r.status} ${await r.text()}`);
+    const j = await r.json();
+    out.textContent = j.key || '(no key returned)';
+  } catch (e) {
+    out.textContent = 'error: ' + e.message;
+  }
+}
+
+async function runPlayground() {
+  const key = document.getElementById('pg-key').value.trim();
+  const elec = document.getElementById('pg-elec').value.split(',').map(s => s.trim()).filter(Boolean);
+  const dur = parseInt(document.getElementById('pg-dur').value, 10) || 8;
+  const out = document.getElementById('pg-out');
+  out.textContent = 'sending…';
+  const samples = elec.map(() => Array.from({length: dur * 200}, () => Math.random() * 2 - 1));
+  try {
+    const r = await fetch('/v1/embeddings', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + key, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        electrode_names: elec, samples, sample_rate_hz: 200, window_seconds: 4, return_per_window: false
+      })
+    });
+    const j = await r.json();
+    out.textContent = `HTTP ${r.status}\n` + JSON.stringify(j, null, 2);
+  } catch (e) {
+    out.textContent = 'error: ' + e.message;
+  }
+}
+
+refreshStatus();
+setInterval(refreshStatus, 10000);
+</script>
+</body>
+</html>
