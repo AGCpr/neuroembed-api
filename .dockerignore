@@ -1,0 +1,25 @@
+# Build artifacts
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+build/
+dist/
+*.egg-info/
+
+# Editor
+.idea/
+.vscode/
+*.swp
+
+# Test artifacts
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# Local env
+.env
+.env.local
+.env.*.local
