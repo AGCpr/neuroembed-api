@@ -4,9 +4,6 @@ from __future__ import annotations
 from fastapi import Header, HTTPException, status
 
 from neuroembed.auth.apikey import ApiKey
-from neuroembed.auth.store import lookup
-
-
 from neuroembed.auth.store import lookup as _lookup
 
 

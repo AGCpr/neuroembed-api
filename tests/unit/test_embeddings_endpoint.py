@@ -17,8 +17,8 @@ def _clear_embedding_cache() -> None:
 
 @pytest.fixture
 def client() -> TestClient:
-    from neuroembed.main import create_app
     from neuroembed.config import reset_settings_cache
+    from neuroembed.main import create_app
 
     reset_settings_cache()
     return TestClient(create_app())
@@ -39,8 +39,8 @@ def _ok_payload() -> dict[str, object]:
 
 
 def _seed_auth() -> str:
-    from neuroembed.auth.store import get_store
     from neuroembed.auth.apikey import hash_api_key
+    from neuroembed.auth.store import get_store
 
     key = "nmb_testkey_valid_xxxxxxxxxxxxxx"
     get_store().add_key("k_test", hash_api_key(key), tier="hobby")

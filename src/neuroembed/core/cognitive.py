@@ -54,7 +54,7 @@ def score_from_embedding(
     raw = raw * (1.0 + bias)  # perturb
     raw = np.clip(raw, 1e-3, None)
     raw = raw / raw.sum()
-    sleep = {k: float(v) for k, v in zip(("wake", "n1", "n2", "n3", "rem"), raw)}
+    sleep = {k: float(v) for k, v in zip(("wake", "n1", "n2", "n3", "rem"), raw, strict=False)}
 
     return (
         {

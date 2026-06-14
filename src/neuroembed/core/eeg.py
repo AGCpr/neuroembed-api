@@ -47,7 +47,10 @@ class ParsedEeg:
 
     @property
     def shape(self) -> tuple[int, int]:
-        return self.data.shape
+        n = self.data.shape
+        if len(n) != 2:
+            raise RuntimeError(f"ParsedEeg.data must be 2D, got shape {n}")
+        return int(n[0]), int(n[1])
 
     @property
     def duration_seconds(self) -> float:
@@ -102,12 +105,12 @@ def parse_edf_file(path: str | Path) -> ParsedEeg:
     Imported lazily so the API process can run without mne.
     """
     try:
-        import mne  # noqa: F401
+        import mne
     except ImportError as e:
         raise ImportError(
             "EDF parsing requires the 'model' extra: pip install neuroembed[model]"
         ) from e
-    import mne  # type: ignore[no-redef]
+    import mne
 
     raw = mne.io.read_raw_edf(str(path), preload=True, verbose=False)
     data = raw.get_data(picks="eeg").astype(np.float32)

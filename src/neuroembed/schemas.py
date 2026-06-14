@@ -1,8 +1,6 @@
 """Pydantic request/response schemas for the v1 API."""
 from __future__ import annotations
 
-from typing import Optional
-
 from pydantic import BaseModel, Field, field_validator
 
 
@@ -33,7 +31,7 @@ class EmbeddingsRequest(BaseModel):
         default=True,
         description="If true, also return per-window embeddings.",
     )
-    model: Optional[str] = Field(
+    model: str | None = Field(
         default=None,
         description="Model id override; defaults to the server-configured model.",
     )
@@ -58,7 +56,7 @@ class EmbeddingsResponse(BaseModel):
     window_count: int
     embedding_dim: int
     mean_embedding: list[float]
-    window_embeddings: Optional[list[list[float]]] = None
+    window_embeddings: list[list[float]] | None = None
     processing_ms: int
     cached: bool
 

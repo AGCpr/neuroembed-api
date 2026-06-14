@@ -5,12 +5,10 @@ import numpy as np
 import pytest
 
 from neuroembed.core.eeg import (
-    ParsedEeg,
     parse_recording,
     resample_to,
     validate_electrode_set,
 )
-
 
 # A minimal 8-channel, 4-second, 200Hz array — exactly one window.
 SAMPLE_NPZ = {

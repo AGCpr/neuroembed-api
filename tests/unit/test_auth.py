@@ -1,13 +1,11 @@
 """Unit tests for the API-key auth module — TDD cycle 5 (RED)."""
 from __future__ import annotations
 
-import pytest
-
 from neuroembed.auth.apikey import (
+    ApiKey,
     generate_api_key,
     hash_api_key,
     verify_api_key,
-    ApiKey,
 )
 
 

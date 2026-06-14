@@ -16,9 +16,6 @@ from neuroembed.config import Settings, get_settings
 from neuroembed.observability.logging import configure_logging, get_logger
 from neuroembed.observability.metrics import render_metrics
 
-
-
-
 log = get_logger(__name__)
 
 

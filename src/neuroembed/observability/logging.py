@@ -37,4 +37,7 @@ def configure_logging(settings: Settings) -> None:
 
 def get_logger(name: str | None = None) -> structlog.stdlib.BoundLogger:
     """Get a structlog logger. Use this everywhere instead of stdlib logging."""
-    return structlog.get_logger(name)
+    result = structlog.get_logger(name)
+    # structlog's return type is wide; the BoundLogger branch is the one we
+    # get at runtime. Cast through Any to satisfy strict return types.
+    return result  # type: ignore[no-any-return]

@@ -10,6 +10,7 @@ from threading import Lock
 
 from neuroembed.auth.apikey import ApiKey, hash_api_key, verify_api_key
 
+
 # Each registered entry: (key_id, hashed_secret, tier)
 @dataclass(frozen=True)
 class _Entry:

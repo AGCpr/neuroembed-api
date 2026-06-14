@@ -11,7 +11,6 @@ from dataclasses import dataclass
 
 import bcrypt
 
-
 _KEY_PREFIX = "nmb_"
 _KEY_BODY_BYTES = 32  # 256 bits of entropy
 

@@ -15,7 +15,7 @@ from collections import OrderedDict
 from threading import Lock
 
 import numpy as np
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException
 
 from neuroembed.auth.apikey import ApiKey
 from neuroembed.auth.deps import require_api_key

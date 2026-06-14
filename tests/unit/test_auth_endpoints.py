@@ -13,9 +13,9 @@ def valid_key() -> str:
 @pytest.fixture
 def app_with_auth(monkeypatch: pytest.MonkeyPatch, valid_key: str):
     """Create an app where a known key is registered in the in-memory store."""
+    from neuroembed.auth import store
     from neuroembed.auth.apikey import hash_api_key
     from neuroembed.main import create_app
-    from neuroembed.auth import store
 
     store.reset()
     store.add_key(key_id="k_test", hashed=hash_api_key(valid_key), tier="hobby")
@@ -23,8 +23,8 @@ def app_with_auth(monkeypatch: pytest.MonkeyPatch, valid_key: str):
 
 
 def test_embeddings_without_auth_header_returns_401() -> None:
-    from neuroembed.main import create_app
     from neuroembed.auth import store
+    from neuroembed.main import create_app
 
     store.reset()
     client = TestClient(create_app())
@@ -33,8 +33,8 @@ def test_embeddings_without_auth_header_returns_401() -> None:
 
 
 def test_embeddings_with_invalid_token_returns_401() -> None:
-    from neuroembed.main import create_app
     from neuroembed.auth import store
+    from neuroembed.main import create_app
 
     store.reset()
     client = TestClient(create_app())
@@ -66,8 +66,8 @@ def test_embeddings_with_valid_token_succeeds(app_with_auth) -> None:
 
 def test_metrics_endpoint_does_not_require_auth() -> None:
     """/metrics is public for Prometheus scrape."""
-    from neuroembed.main import create_app
     from neuroembed.auth import store
+    from neuroembed.main import create_app
 
     store.reset()
     client = TestClient(create_app())
@@ -77,8 +77,8 @@ def test_metrics_endpoint_does_not_require_auth() -> None:
 
 def test_healthz_does_not_require_auth() -> None:
     """/healthz and /readyz are public for liveness/readiness probes."""
-    from neuroembed.main import create_app
     from neuroembed.auth import store
+    from neuroembed.main import create_app
 
     store.reset()
     client = TestClient(create_app())

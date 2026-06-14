@@ -7,10 +7,10 @@ from fastapi.testclient import TestClient
 
 @pytest.fixture
 def client() -> TestClient:
-    from neuroembed.main import create_app
     from neuroembed.auth import store as auth_store
-    from neuroembed.config import reset_settings_cache
     from neuroembed.auth.apikey import hash_api_key
+    from neuroembed.config import reset_settings_cache
+    from neuroembed.main import create_app
 
     reset_settings_cache()
     auth_store.reset()
