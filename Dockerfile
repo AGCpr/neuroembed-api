@@ -17,7 +17,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # ---- cpu (default) -------------------------------------------------------
 FROM base AS cpu
-COPY pyproject.toml ./
+# Copy metadata files that pyproject.toml references (readme, license).
+# The src/ copy happens after pip install so changes to source don't
+# bust the dependency layer.
+COPY pyproject.toml README.md LICENSE ./
 COPY src ./src
 RUN pip install --no-cache-dir ".[dev]" && \
     useradd --create-home --shell /bin/bash app
@@ -40,7 +43,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
-COPY pyproject.toml ./
+COPY pyproject.toml README.md LICENSE ./
 COPY src ./src
 RUN pip install --no-cache-dir ".[dev,model]"
 USER root
